@@ -10,7 +10,7 @@ use Scalar::Util 'readonly';
 use constant MAX_RAND_INT       => 2**32;
 use constant MATH_RANDOM_SECURE => eval "require Math::Random::Secure;";
 
-our $MAX_PAYLOAD_SIZE = 65536;
+our $MAX_PAYLOAD_SIZE = 512 * 1014;
 
 our %TYPES = (
     continuation => 0x00,
@@ -249,8 +249,8 @@ sub to_bytes {
     }
 
     if ($self->{max_payload_size} && length $self->{buffer} > $self->{max_payload_size}) {
-        die "Payload is too big. "
-          . "Send shorter messages or increase max_payload_size";
+        die "Payload is too big. (" . length($self->{buffer}) . ") "
+          . "Send shorter messages or increase max_payload_size=" . $self->{max_payload_size};
     }
 
 
